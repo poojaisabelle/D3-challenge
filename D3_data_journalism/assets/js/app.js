@@ -55,6 +55,25 @@ function yScale(censusData, chosenYaxis) {
   
 }
 
+// Create a function that will update the xAxis upon click of the axis label
+function renderAxes(newXScale, xAxis) {
+    var bottomAxis = d3.axisBottom(newXScale);
+    xAxis.transition()
+      .duration(1000)
+      .call(bottomAxis);
+    return xAxis;
+}
+
+// Create a function that will update the yAxis upon click of the axis label
+function renderAxes(newYScale, yAxis) {
+    var bottomAxis = d3.axisBottom(newYScale); 
+    yAxis.transition()
+      .duration(1000)
+      .call(bottomAxis);
+    return yAxis;
+}
+
+
 
 // Load data from hours-of-tv-watched.csv
 d3.csv("./data.csv").then(function(censusData) {
