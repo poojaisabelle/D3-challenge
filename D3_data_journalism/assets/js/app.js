@@ -72,13 +72,21 @@ function renderAxes(newYScale, yAxis) {
 }
 
 
-// function used for updating circles group with a transition 
+// Create a function that will update the circles group with a transition 
 function renderCircles(circlesGroup, newXScale, chosenXaxis, newYScale, chosenYaxis) {
     circlesGroup.transition()
       .duration(1000)
       .attr("cx", d => newXScale(d[chosenXaxis]))
       .attr("cy", d => newYScale(d[chosenYaxis]));
     return circlesGroup;
+}
+
+// Create a function that will update the text within the circles 
+function renderText(circletextGroup, newXScale, chosenYaxis, newYScale, chosenYaxis) {
+    circletextGroup.transition()
+        .attr("x", d => newXScale(d[chosenXaxis]))
+        .attr("y", d => newYScale(d[chosenYaxis]));
+    return circletextGroup;
 }
 
 
