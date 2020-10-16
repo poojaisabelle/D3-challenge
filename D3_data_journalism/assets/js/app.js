@@ -133,7 +133,7 @@ d3.csv("./assets/data/data.csv").then(function(cenData, err) {
 
     // console.log(cenData);
 
-    // step 1: parse the data 
+    // Parse the relevant data 
     cenData.forEach(function(data) {
         data.age = +data.age;
         data.poverty = +data.poverty;
@@ -150,6 +150,29 @@ d3.csv("./assets/data/data.csv").then(function(cenData, err) {
     // Create the initial axis functions 
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
+
+    // Append the x axis 
+    var xAxis = chartGroup.append("g")
+        .classed("x-axis", true)
+        .attr("transform", `translate(0, ${height})`)
+        .call(bottomAxis);
+
+    // Append the y axis 
+    chartGroup.append("g")
+        .call(leftAxis);
+
+    // Append the initial circles 
+    var circlesGroup = chartGroup.selectAll("circle")
+        .data(cenData)
+        .enter()
+        .append("circle")
+        .attr("cx", d => xLinearScale(d[chosenXaxis]))
+        .attr("cy", d => yLinearScale(d[chosenYaxis]))
+        .attr("r", 20)
+        .attr("fill", "pink")
+        .attr("opacity", ".5")
+
+    // Create group for two 
 
   
 }).catch(function(error) {
