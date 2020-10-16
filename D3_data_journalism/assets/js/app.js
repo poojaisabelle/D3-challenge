@@ -127,11 +127,30 @@ function updateToolTip(chosenXaxis, chosenYaxis, circlesGroup) {
 }
 
 
+// Load data from the data.csv
+d3.csv("./assets/data/data.csv").then(function(cenData, err) {
+    if (err) throw err;
 
-// Load data from hours-of-tv-watched.csv
-d3.csv("./assets/data/data.csv").then(function(censusData) {
+    // console.log(cenData);
 
-    console.log(censusData);
+    // step 1: parse the data 
+    cenData.forEach(function(data) {
+        data.age = +data.age;
+        data.poverty = +data.poverty;
+        data.healthcare = +data.healthcare;
+        data.smokes = +data.smokes;
+    });
+
+    // Call the xScale function and pass in cenData and chosenXaxis 
+    var xLinearScale = xScale(cenData, chosenXaxis);
+
+    // Call the yScale function and pass in cenData and chosenYaxis 
+    var yLinearScale = yScale(cenData, chosenYaxis);
+
+    // Create the initial axis functions 
+    var bottomAxis = d3.axisBottom(xLinearScale);
+    var leftAxis = d3.axisLeft(yLinearScale);
+
   
 }).catch(function(error) {
     console.log(error);
