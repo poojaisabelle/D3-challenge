@@ -38,8 +38,7 @@ function xScale(cenData, chosenXaxis) {
         d3.max(cenData, d => d[chosenXaxis]) * 1.2
       ]).range([0, chartWidth]);
 
-    return xLinearScale;
-  
+    return xLinearScale;  
 }
 
 // Create a function that will update the Y-scale upon click 
@@ -50,7 +49,7 @@ function yScale(cenData, chosenYaxis) {
         .domain([d3.min(cenData, d => d[chosenYaxis]) * 0.8,
         d3.max(cenData, d => d[chosenYaxis]) * 1.2
       ]).range([chartHeight, 0]);
-       
+
     return yLinearScale;
   
 }
@@ -66,10 +65,10 @@ function renderXAxes(newXScale, xAxis) {
 
 // Create a function that will update the yAxis upon click of the axis label
 function renderYAxes(newYScale, yAxis) {
-    var bottomAxis = d3.axisBottom(newYScale); 
+    var leftAxis = d3.axisLeft(newYScale); 
     yAxis.transition()
       .duration(1000)
-      .call(bottomAxis);
+      .call(leftAxis);
     return yAxis;
 }
 
@@ -156,7 +155,7 @@ d3.csv("./assets/data/data.csv").then(function(cenData, err) {
     // Append the x axis 
     var xAxis = chartGroup.append("g")
         .classed("x-axis", true)
-        .attr("transform", `translate(0, ${height})`)
+        .attr("transform", `translate(0, ${chartHeight})`)
         .call(bottomAxis);
 
     // Append the y axis 
@@ -188,7 +187,7 @@ d3.csv("./assets/data/data.csv").then(function(cenData, err) {
 
     // Create a label group for two x-axis labels 
     var xlabelsGroup = chartGroup.append("g")
-        .attr("transform", `translate(${width / 2}, ${height +20})`);
+        .attr("transform", `translate(${chartWidth / 2}, ${chartHeight +20})`);
     
     var ageLabel = xlabelsGroup.append("text")
         .attr("x", 0)
