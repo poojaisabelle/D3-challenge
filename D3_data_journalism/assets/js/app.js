@@ -162,17 +162,74 @@ d3.csv("./assets/data/data.csv").then(function(cenData, err) {
         .call(leftAxis);
 
     // Append the initial circles 
-    var circlesGroup = chartGroup.selectAll("circle")
+    var circlesGroup = chartGroup.selectAll()
         .data(cenData)
         .enter()
         .append("circle")
+        .classed("stateCircle", true)
         .attr("cx", d => xLinearScale(d[chosenXaxis]))
         .attr("cy", d => yLinearScale(d[chosenYaxis]))
         .attr("r", 20)
         .attr("fill", "pink")
-        .attr("opacity", ".5")
+        .attr("opacity", ".5");
 
-    // Create group for two 
+    // Append the state abbreviations to the inside of the circle 
+    var innerCircleText = chartGroup.selectAll()
+        .data(cenData)
+        .enter()
+        .append("text")
+        .classed("stateAbbr", true)
+        .text(d => (d.abbr))
+        .attr("x", d => xLinearScale(d[chosenXaxis]))
+        .attr("y", d => yLinearScale(d[chosenYaxis]))
+        .attr("dy", 3);
+
+    // Create a label group for two x-axis labels 
+    var xlabelsGroup = chartGroup.append("g")
+        .attr("transform", `translate(${width / 2}, ${height +20})`);
+    
+    var ageLabel = xlabelsGroup.append("text")
+        .attr("x", 0)
+        .attr("y", 20)
+        .attr("value", "age") 
+        .classed("active", true)
+        .text("Median Age");
+
+    var povertyLabel = xlabelsGroup.append("text")
+        .attr("x", 0)
+        .attr("y", 40)
+        .attr("value", "poverty")
+        .classed("inactive", true)
+        .text("In Poverty (%)")
+    
+    // Create a label group for two y-axis labels 
+    var ylabelsGroup = chartGroup.append("g")
+        .attr("transform", "rotate(-90");
+
+    
+    var smokesLabel = ylabelsGroup.append("text")
+        .attr("y", 0 - chartMargin.left)
+        .attr("x", 20 - (chartHeight / 2))
+        .attr("dy", "1em")
+        .attr("value", "smokes") 
+        .classed("active", true)
+        .text("Smokes (%)");
+
+    var healthcareLabel = ylabelsGroup.append("text")
+        .attr("y", 0 - chartMargin.left)
+        .attr("x", 40 - (chartHeight / 2))
+        .attr("dy", "3em")
+        .attr("value", "healthcare") 
+        .classed("inactive", true)
+        .text("Lacks Healthcare (%)"); 
+    
+        // Update ToolTip function 
+        var circlesGroup = updateToolTip(chosenXaxis, chosenYaxis, circlesGroup);
+
+        // Add the event listeners for the X-axis 
+        labels.Group
+
+
 
   
 }).catch(function(error) {
