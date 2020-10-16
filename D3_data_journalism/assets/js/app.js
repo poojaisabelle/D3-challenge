@@ -30,31 +30,33 @@ var chosenXaxis = "age";
 var chosenYaxis = "smokes";
 
 // Create a function that will update the X-scale upon click 
-function xScale(censusData, chosenXaxis) {
+function xScale(cenData, chosenXaxis) {
+
     // create scales
     var xLinearScale = d3.scaleLinear()
-      .domain([d3.min(censusData, d => d[chosenXaxis]) * 0.8,
-        d3.max(censusData, d => d[chosenXaxis]) * 1.2
-      ])
-      .range([0, width]);
+        .domain([d3.min(cenData, d => d[chosenXaxis]) * 0.8,
+        d3.max(cenData, d => d[chosenXaxis]) * 1.2
+      ]).range([0, chartWidth]);
+
     return xLinearScale;
   
 }
 
 // Create a function that will update the Y-scale upon click 
-function yScale(censusData, chosenYaxis) {
+function yScale(cenData, chosenYaxis) {
+
     // create scales
     var yLinearScale = d3.scaleLinear()
-      .domain([d3.min(censusData, d => d[chosenYaxis]) * 0.8,
-        d3.max(censusData, d => d[chosenYaxis]) * 1.2
-      ])
-      .range([height, 0]); 
+        .domain([d3.min(cenData, d => d[chosenYaxis]) * 0.8,
+        d3.max(cenData, d => d[chosenYaxis]) * 1.2
+      ]).range([chartHeight, 0]);
+       
     return yLinearScale;
   
 }
 
 // Create a function that will update the xAxis upon click of the axis label
-function renderAxes(newXScale, xAxis) {
+function renderXAxes(newXScale, xAxis) {
     var bottomAxis = d3.axisBottom(newXScale);
     xAxis.transition()
       .duration(1000)
@@ -63,7 +65,7 @@ function renderAxes(newXScale, xAxis) {
 }
 
 // Create a function that will update the yAxis upon click of the axis label
-function renderAxes(newYScale, yAxis) {
+function renderYAxes(newYScale, yAxis) {
     var bottomAxis = d3.axisBottom(newYScale); 
     yAxis.transition()
       .duration(1000)
@@ -227,11 +229,91 @@ d3.csv("./assets/data/data.csv").then(function(cenData, err) {
         var circlesGroup = updateToolTip(chosenXaxis, chosenYaxis, circlesGroup);
 
         // Add the event listeners for the X-axis 
-        labels.Group
+        xlabelsGroup.selectAll("text")
+            .on("click", function() {
 
+                // Obtain the value of selection
+                var value = d3.select(this)
+                    .attr("value");
+                
+                // Replaces the chosenXaxis with value chosen
+                if (value !== chosenXaxis) {
+                    chosenXaxis = value;
+                    // console.log(chosenXaxis);
 
+                    // Call the xScale function 
+                    xLinearScale = xScale(cenData, chosenXaxis);
 
-  
+                    // Update the X-axis with transition 
+                    xAxis = renderXAxes(xLinearScale, xAxis);
+
+                    // Update the circles with the new x values 
+                    circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXaxis);
+
+                    // Update the text with the new values 
+                    circletextGroup = renderText(circletextGroup, xLinearScale, chosenXaxis);
+
+                    // Update the ToolTips with the new information 
+                    circletextGroup = updateToolTip(chosenXaxis, chosenYaxis, circletextGroup);
+
+                    // Change classes to change bold text 
+                    if (chosenXaxis === "age") {
+                        ageLabel.classed("active", true)
+                            .classed("inactive", false);
+                        povertyLabel.classed("active", false)
+                            .classed("inactive", true);
+                    }
+                    else {
+                        ageLabel.classed("active", false)    
+                            .classed("inactive", true);
+                        povertyLabel.classed("active", true)
+                            .classed("inactive", false);
+                    }
+                }
+            });
+        
+        ylabelsGroup.selectAll("text")
+            .on("click", function() {
+
+                // Obtain the value of selection
+                var value = d3.select(this)
+                    .attr("value");
+                
+                // Replaces the chosenXaxis with value chosen
+                if (value !== chosenYaxis) {
+                    chosenYaxis = value;
+                    // console.log(chosenXaxis);
+
+                    // Call the xScale function 
+                    yLinearScale = yScale(cenData, chosenYaxis);
+
+                    // Update the X-axis with transition 
+                    yAxis = renderYAxes(yLinearScale, yAxis);
+
+                    // Update the circles with the new x values 
+                    circlesGroup = renderCircles(circlesGroup, yLinearScale, chosenYaxis);
+
+                    // Update the text with the new values 
+                    circletextGroup = renderText(circletextGroup, yLinearScale, chosenYaxis);
+
+                    // Update the ToolTips with the new information 
+                    circletextGroup = updateToolTip(chosenXaxis, chosenYaxis, circletextGroup);
+
+                    // Change classes to change bold text 
+                    if (chosenYaxis === "smokes") {
+                        healthcareLabel.classed("inactive", true)
+                            .classed("active", false);
+                        smokesLabel.classed("active", true)
+                            .classed("inactive", false);
+                    }
+                    else {
+                        healthcareLabel.classed("inactive", false)
+                            .classed("active", true);
+                        smokesLabel.classed("active", false)
+                            .classed("inactive", true);
+                    } 
+                }
+            });
 }).catch(function(error) {
     console.log(error);
 });
