@@ -37,7 +37,6 @@ function xScale(censusData, chosenXaxis) {
         d3.max(censusData, d => d[chosenXaxis]) * 1.2
       ])
       .range([0, width]);
-  
     return xLinearScale;
   
 }
@@ -49,8 +48,7 @@ function yScale(censusData, chosenYaxis) {
       .domain([d3.min(censusData, d => d[chosenYaxis]) * 0.8,
         d3.max(censusData, d => d[chosenYaxis]) * 1.2
       ])
-      .range([height, 0]);
-  
+      .range([height, 0]); 
     return yLinearScale;
   
 }
@@ -74,9 +72,21 @@ function renderAxes(newYScale, yAxis) {
 }
 
 
+// function used for updating circles group with a transition 
+function renderCircles(circlesGroup, newXScale, chosenXaxis, newYScale, chosenYaxis) {
+    circlesGroup.transition()
+      .duration(1000)
+      .attr("cx", d => newXScale(d[chosenXaxis]))
+      .attr("cy", d => newYScale(d[chosenYaxis]));
+    return circlesGroup;
+}
+
+
+
+
 
 // Load data from hours-of-tv-watched.csv
-d3.csv("./data.csv").then(function(censusData) {
+d3.csv("./assets/data/data.csv").then(function(censusData) {
 
     console.log(censusData);
   
