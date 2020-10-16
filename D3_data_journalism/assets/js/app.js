@@ -82,8 +82,9 @@ function renderCircles(circlesGroup, newXScale, chosenXaxis, newYScale, chosenYa
 }
 
 // Create a function that will update the text within the circles 
-function renderText(circletextGroup, newXScale, chosenYaxis, newYScale, chosenYaxis) {
+function renderText(circletextGroup, newXScale, chosenXaxis, newYScale, chosenYaxis) {
     circletextGroup.transition()
+        .duration(1000)
         .attr("x", d => newXScale(d[chosenXaxis]))
         .attr("y", d => newYScale(d[chosenYaxis]));
     return circletextGroup;
