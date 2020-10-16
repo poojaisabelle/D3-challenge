@@ -71,7 +71,6 @@ function renderAxes(newYScale, yAxis) {
     return yAxis;
 }
 
-
 // Create a function that will update the circles group with a transition 
 function renderCircles(circlesGroup, newXScale, chosenXaxis, newYScale, chosenYaxis) {
     circlesGroup.transition()
@@ -89,7 +88,43 @@ function renderText(circletextGroup, newXScale, chosenYaxis, newYScale, chosenYa
     return circletextGroup;
 }
 
+// Create function to update the circles group with new tooltip
+function updateToolTip(chosenXaxis, chosenYaxis, circlesGroup) {
+    var xlabel;
+    var yLabel;
 
+    if (chosenXaxis === "age") {
+        xlabel = "Age";
+    }
+    else {
+        xlabel = "In Poverty (%)";
+    }
+
+    if (chosenYaxis === "smokes") {
+        ylabel = "Smoker (%)"
+    }
+    else {
+        ylabel = "Lacks Healthcare (%)"
+    }
+
+    var toolTip = d3.tip()
+        .attr("class", "tooltip")
+        .offset([100, -60])
+        .html(function(d) {
+        return (`${d.state}<br>
+            ${xlabel} ${d[chosenXaxis]}<br>${yLabel} ${d[chosenYaxis]}`);
+    });
+
+    circlesGroup.call(toolTip);
+
+    circlesGroup.on("mouseover", function(d) {
+        toolTip.show(d, this);
+    }).on("mouseout", function(d) {
+        toolTip.hide(d);
+    });
+
+    return circlesGroup;
+}
 
 
 
